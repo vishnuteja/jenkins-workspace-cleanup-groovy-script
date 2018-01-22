@@ -8,21 +8,6 @@ import hudson.model.*
 //Get value from String Parameter
 MAX_BUILDS = manager.build.buildVariables.get("MAX_BUILDS").toInteger()
 
-parent_job_name = "";
-
-// Finds the parent/cause job name
-for (cause in manager.build.causes)
-{
-    if (cause.class.toString().contains("UpstreamCause")) {
-         manager.listener.logger.println " ____ Parent Job Name : " + cause.getUpstreamProject()
-         parent_job_name = cause.getUpstreamProject()
-     }
-}
-
-manager.listener.logger.println "Current Job Name -"+ manager.build.project.getName()
-
-manager.addShortText(parent_job_name, "#FFF", "#000", "1", "#FF0000") 
-
 for (job in Jenkins.instance.items) 
 {
   
@@ -30,8 +15,6 @@ for (job in Jenkins.instance.items)
   	
     manager.listener.logger.println "\n ***Job Name: "+job.name+"***"
     
-    if(parent_job_name!="" && job.name==parent_job_name)
-    {
         if(job.workspace!=null && job.workspace!="")  //Check if there is a workspace associated with the Job
         {
             manager.listener.logger.println "Workspace path : " + job.workspace
@@ -72,10 +55,7 @@ for (job in Jenkins.instance.items)
             manager.listener.logger.println "No Workspace associated with this job"
         }
     }
-    else
-    {
-        manager.listener.logger.print "--Skipped"
-    }
+
 }
 
 //manager.listener.logger.println new Date(System.currentTimeMillis()).format('MM/dd/yyyy hh:mm:ss a') + " / " + " -- End Time" 
